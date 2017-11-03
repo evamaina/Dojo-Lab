@@ -1,0 +1,29 @@
+{
+    "allocation_config": {
+        "fellow": [
+            "office",
+            "living"
+        ],
+        "staff": [
+            "office"
+        ]
+    },
+    "available_spaces": {
+        "mahiga": {
+            "allocated": [],
+            "type": "office"
+        },
+        "test": {
+            "allocated": [],
+            "type": "office"
+        }
+    },
+    "space_config": {
+        "livingspace": {
+            "max": 4
+        },
+        "office": {
+            "max": 6
+        }
+    }
+}
