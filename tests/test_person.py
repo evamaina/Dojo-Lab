@@ -1,7 +1,14 @@
 import unittest
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 # import sys  # System-specific parameters and functions
 # from os import path
-from person import Fellow, Staff
+from src.person import Fellow, Staff
 # sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 
