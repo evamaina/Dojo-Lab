@@ -89,5 +89,5 @@
 </h2>
 <p>
     <a href="http://radek.io/2015/01/19/docopt/">Docopt</a> - Docopt helps you create most beautiful command-line interfaces.I
-    found this article very helpful
+    found this article very helpful.
 </p>
