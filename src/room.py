@@ -2,7 +2,7 @@ class Room(object):
     """A class to create room objects whereby the other sub-classes
     like office and living room inherit properties from."""
 
-    def __init__(self, room_name, room_type, room_capacity):
+    def __init__(self, room_name=None, room_type= None, room_capacity=None):
 
         self.room_name = room_name
         self.room_type = room_type

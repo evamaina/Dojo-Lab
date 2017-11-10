@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+# Dojo-Lab
+>>>>>>> 9cb56e1646d4f946e8a7b27813f8e366b6fafc4b
 <p>
     <b>Project - Andela Office Space Allocation</b>
 </p>
@@ -88,5 +92,9 @@
 </h2>
 <p>
     <a href="http://radek.io/2015/01/19/docopt/">Docopt</a> - Docopt helps you create most beautiful command-line interfaces.I
+<<<<<<< HEAD
     found this article very helpful
+=======
+    found this article very helpful.
+>>>>>>> 9cb56e1646d4f946e8a7b27813f8e366b6fafc4b
 </p>
