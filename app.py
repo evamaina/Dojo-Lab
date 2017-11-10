@@ -28,6 +28,7 @@ def app_exec(func):
         try:
             opt = docopt(fn.__doc__, arg)
         except DocoptExit as e:
+             # The DocoptExit is thrown when the args do not match.
             msg = "Invalid command! See help."
             print(msg)
             print(e)

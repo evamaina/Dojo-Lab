@@ -29,16 +29,45 @@ class Dojo(object):
     """
     def add_person(self, args):
         if args['<person_type>'] == 'fellow':
-            new_person = Fellow(args['<person_name>'])
+            new_person = Fellow(args['<person_name>'], args['<person_type>'])
             print(new_person.person_name)
         elif args['<person_type>'] == 'staff':
-            new_person = Staff(args['<person_name>'])
+            new_person = Staff(args['<person_name>'], args['<person_type>'])
             print(new_person.person_name)
 
 
 
 
-"""Usage: add_person <person_name>  (fellow|staff)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Usage: add_person <person_name>  (fellow,staff)
         [<wants_accommodation>]
         if args["<person_name>"]:
             person_name = args["<person_name>"]
