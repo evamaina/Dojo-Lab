@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 # Dojo-Lab
 >>>>>>> 9cb56e1646d4f946e8a7b27813f8e366b6fafc4b
 <p>
