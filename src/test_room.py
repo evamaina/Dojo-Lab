@@ -13,9 +13,15 @@ class RoomTestCases(unittest.TestCase):
     def setUp(self):
         # set up the objects
         self.new_office = Office("Blue")
+
+        self.new_living_Space = Living_Space("Red")
+        self.new_fellow = Fellow("Eva Johnson", "Y")
+        self.new_staff = Staff("Evet ", "N")
+
         self.new_living_Space = Living_Space("Mag")
         self.new_fellow = Fellow("Eva Johnson", "Y")
         self.new_staff = Staff("Evet Maina", "N")
+
 
     def test_office_object(self):
         """
@@ -32,8 +38,13 @@ class RoomTestCases(unittest.TestCase):
         """
         Tests for the class living space and its attributes
         """
+
+        self.assertTrue(self.new_living_Space, "Red")
+        self.assertEqual(self.new_living_Space.room_name, "Red")
+
         self.assertTrue(self.new_living_Space, "Mag")
         self.assertEqual(self.new_living_Space.room_name, "Mag")
+
         self.assertTrue(self.new_living_Space.room_type, "living_Space")
         self.assertEqual(self.new_living_Space.room_capacity, 4)
         self.assertEqual(self.new_living_Space.room_occupant, [])
