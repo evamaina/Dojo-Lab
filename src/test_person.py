@@ -1,7 +1,7 @@
 import unittest
 
 import os
-import sys
+import sys  # System-specific parameters and functions
 import inspect
 from person import Fellow, Staff
 currentdir = os.path.dirname(os.path.abspath(

@@ -1,8 +1,21 @@
+import random
 from src.room import *
 from src.person import *
 
 
 class Dojo(object):
+
+    """Class Dojo that creates rooms, 
+    adds people to rooms and saves the state
+    of the rooms and people.
+    """
+    unallocated_people = []
+
+    def __init__(self):
+        self.all_rooms = []
+        self.all_people = []
+        self.livingspace_with_occupants = {}
+        self.office_with_occupants = {}
     """
     {'<room_name>': ['blue', 'gree', 'red'],
      '<room_type>': 'office'}
@@ -29,16 +42,72 @@ class Dojo(object):
     """
     def add_person(self, args):
         if args['<person_type>'] == 'fellow':
-            new_person = Fellow(args['<person_name>'])
-            print(new_person.person_name)
+            new_person = Fellow(args['<person_name>'], args['<person_type>'])
+            print("A person called {} has been added to the room!".format(new_person.person_name))
         elif args['<person_type>'] == 'staff':
-            new_person = Staff(args['<person_name>'])
+            new_person = Staff(args['<person_name>'], args['<person_type>'])
             print(new_person.person_name)
 
 
 
 
-"""Usage: add_person <person_name>  (fellow|staff)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""Usage: add_person <person_name>  (fellow,staff)
         [<wants_accommodation>]
         if args["<person_name>"]:
             person_name = args["<person_name>"]
