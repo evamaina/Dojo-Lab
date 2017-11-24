@@ -18,6 +18,7 @@ from docopt import docopt, DocoptExit
 from pyfiglet import figlet_format
 from termcolor import cprint
 from src.dojo import Dojo
+from src.room import Room, Office, Living_Space
 
 
 def app_exec(func):
@@ -74,10 +75,6 @@ class DojoCli(cmd.Cmd):
         self.dojo.print_room(arg)
         pass
 
-
-
-    
-
     @app_exec
     def do_print_allocations(self, arg):
         """prints alloacted rooms"""
@@ -126,7 +123,6 @@ class DojoCli(cmd.Cmd):
     @app_exec
     def do_quit(self, arg):
         """usage: Exits the app"""
-
 
 
 if __name__ == '__main__':

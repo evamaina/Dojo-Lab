@@ -1,9 +1,13 @@
 import unittest
+import os
 import sys
-from os import path
-from room import Room, Office, Living_Space
-from person import Fellow, Staff
-sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from src.room import Room, Office, Living_Space
+from src.person import Fellow, Staff
 
 
 class RoomTestCases(unittest.TestCase):

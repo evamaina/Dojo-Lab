@@ -1,6 +1,12 @@
 import random
-from src.room import *
-from src.person import *
+import os
+import sys  # System-specific parameters and functions
+import inspect
+
+
+from room import Room, Office, Living_Space
+from person import Person, Staff, Fellow
+
 
 
 class Dojo(object):
@@ -9,13 +15,48 @@ class Dojo(object):
     adds people to rooms and saves the state
     of the rooms and people.
     """
-    unallocated_people = []
-
     def __init__(self):
-        self.all_rooms = []
-        self.all_people = []
-        self.livingspace_with_occupants = {}
-        self.office_with_occupants = {}
+        self.people = {
+            "fellows": [],
+            "staff": [],
+            "with_offices": [],
+            "without_offices": [],
+            "with_livingspaces": [],
+            "without_livingspaces": []
+        }
+        self.rooms = {
+            "offices": [],
+            "livingspaces": []
+        }
+
+    def get_random_room(self, room_type):
+        """
+         returns an office or living space that has space.
+        """
+        # Get a random office
+        if room_type == "office":
+            if [room for room in self.rooms["offices"]
+               if len(room.room_occupants) < room.room_capacity]:
+                random_office = random.choice(
+                    [room for room in self.rooms["offices"] if
+                     len(room.room_occupants) < room.room_capacity])
+
+                return random_office
+
+                 # Get a random living space
+        elif room_type == "livingspace":
+            if [room for room in self.rooms["livingspaces"]
+               if len(room.room_occupants) < room.room_capacity]:
+                random_livingspace = random.choice(
+                    [room for room in self.rooms["livingspaces"] if
+                     len(room.room_occupants) < room.room_capacity])
+
+                return random_livingspace
+
+
+
+   
+
     """
     {'<room_name>': ['blue', 'gree', 'red'],
      '<room_type>': 'office'}
@@ -23,18 +64,38 @@ class Dojo(object):
     """
     def create_room(self, args):
         """ create room """
+
+        all_rooms = self.rooms["offices"] + self.rooms["livingspaces"]
         if args["<room_type>"] == "office":
-            for room in args["<room_name>"]:
-                new_room = Office(room)
-                print("An office called {} has been successfully created!".format(new_room.room_name))
+            for room_name in args["<room_name>"]:
+                
+                if room_name in [room_name for room_name in self.rooms["offices"]]:
+                    print(
+                    "Sorry. A room called {} already exists. Please try again"
+                    .format(room_name))
+                else:
+                    new_office = Office(room_name)
+                    self.rooms["offices"].append(new_office)
+                    print("An office called {} has been successfully created!"
+                       .format(new_office.room_name))
+                return new_office
+                
                 """checks whether the room given is livingspace"""
         elif args["<room_type>"] == "livingspace":
-            for room in args["<room_name>"]:
-                new_room = Living_Space(room)
-                print("Living_Space called {} has been successfully created!".format(new_room.room_name))
-        else:
-            print(
-                "Confirm if u entered the correct room type and try again")
+            #for room in args["<room_name>"]:
+            for room_name in args["<room_name>"]:
+                if room_name in [room_name for livingspace in
+                             self.rooms["livingspaces"]]:
+                    print("Sorry. A room called {} already exists. "
+                       "Please try again".format(room_name))
+            else:
+                new_livingspace = Living_Space(room_name)
+                self.rooms["livingspaces"].append(new_livingspace)
+                print("A living space called {} has been successfully created"
+                       .format(new_livingspace.room_name))
+                return new_livingspace
+                
+            
     """
     args = {'--wants_accomodation': True,
      '<person_name>': 'eva',
@@ -42,11 +103,63 @@ class Dojo(object):
     """
     def add_person(self, args):
         if args['<person_type>'] == 'fellow':
-            new_person = Fellow(args['<person_name>'], args['<person_type>'])
-            print("A person called {} has been added to the room!".format(new_person.person_name))
+            new_fellow = Fellow(args['<person_name>'], args['<person_type>'])
+            self.people["fellows"].append(new_fellow)
+            print("A person called {} has been added to the room!".format(new_fellow.person_name))
+            if wants_accommodation is True:
+                """ Checks if there is available living space and if none
+                  the fellow is added to without living spaces list
+                """
+                fellow_livingspace = self.get_random_room("livingspace")
+                if fellow_livingspace is not None:
+                    fellow_livingspace.room_occupants.append(new_fellow)
+                    self.people["with_livingspaces"].append(new_fellow)
+                    print(
+                        "{0} has been allocated the living space {1}.".format(
+                            person_name,
+                            fellow_livingspace.room_name))
+                else:
+                    self.people["without_livingspaces"].append(new_fellow)
+                    print("Sorry."
+                           "No living space is currently available for {}."
+                           "Please try again later".format(new_fellow))
+
+            elif wants_accommodation is False:
+                self.people["without_livingspaces"].append(new_fellow)
+                            # Check if there is a vacant office, if none, add the fellow to
+            # the without offices list
+            fellow_office = self.get_random_room("office")
+            if fellow_office is not None:
+                fellow_office.room_occupants.append(new_fellow)
+                self.people["with_offices"].append(new_fellow)
+                print("{0} has been allocated the office {1}."
+                       .format(person_name, fellow_office.room_name))
+
+            else:
+                self.people["without_offices"].append(new_fellow)
+                print("Sorry. No office is currently available for {}."
+                       "Please try again later".format(new_fellow))
+
+            return new_fellow
+
         elif args['<person_type>'] == 'staff':
-            new_person = Staff(args['<person_name>'], args['<person_type>'])
-            print(new_person.person_name)
+            new_ = Staff(args['<person_name>'], args['<person_type>'])
+            print("A person called {} has been added to the room!".format(new_staff.person_name))
+            """ Checks if there is a vacant office and if none the staff is added to 
+             without offices list
+            """
+            staff_office = self.get_random_room("office")
+            if staff_office is not None:
+                staff_office.room_occupants.append(new_staff)
+                self.people["with_offices"].append(new_staff)
+                print("{0} has been allocated the office {1}.".
+                       format(person_name, staff_office.room_name))
+            else:
+                self.people["without_offices"].append(new_staff)
+                print("Sorry. No office is currently available for {}."
+                       "Please try again later".format(new_staff))
+
+            return new_staff
 
 
 
