@@ -143,8 +143,8 @@ class Dojo(object):
             return new_fellow
 
         elif args['<person_type>'] == 'staff':
-            new_ = Staff(args['<person_name>'], args['<person_type>'])
-            print("A person called {} has been added to the room!".format(new_staff.person_name))
+            new_staff = Staff(args['<person_name>'], args['<person_type>'])
+            print("A person called {} has been added to the dojo!".format(new_staff.person_name))
             """ Checks if there is a vacant office and if none the staff is added to 
              without offices list
             """
@@ -153,11 +153,11 @@ class Dojo(object):
                 staff_office.room_occupants.append(new_staff)
                 self.people["with_offices"].append(new_staff)
                 print("{0} has been allocated the office {1}.".
-                       format(person_name, staff_office.room_name))
+                       format(new_staff.person_name, staff_office.room_name))
             else:
                 self.people["without_offices"].append(new_staff)
-                print("Sorry. No office is currently available for {}."
-                       "Please try again later".format(new_staff))
+                print("Sorry. No office is currently available for {},Please try again later"
+                       .format(new_staff))
 
             return new_staff
 
