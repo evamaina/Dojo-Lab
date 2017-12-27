@@ -15,8 +15,8 @@ Usage:
 """
 import cmd
 from docopt import docopt, DocoptExit
-from pyfiglet import figlet_format
-from termcolor import cprint
+# from pyfiglet import figlet_format
+# from termcolor import cprint
 from src.dojo import Dojo
 from src.room import Room, Office, Living_Space
 
@@ -63,27 +63,31 @@ class DojoCli(cmd.Cmd):
     @app_exec
     def do_add_person(self, arg):
         """adds a new person
-        Usage: add_person <person_name> <person_type> [--wants_accomodation]
+        Usage: add_person <F_name> <L_name>
+        <person_type> [<wants_accomodation>]
         """
         self.dojo.add_person(arg)
 
     @app_exec
-    def do_print_room(self, arg):
-        """prints a new room"""
-        """Usage: print_room <room_name>"""
-
-        self.dojo.print_room(arg)
-        pass
+    def do_print_room(self, args):
+        """Print a room
+        Usage: print_room <room_name>...
+        """
+        self.dojo.print_room(args)
 
     @app_exec
     def do_print_allocations(self, arg):
-        """prints alloacted rooms"""
-        pass
+        """Print a room
+        Usage: print_allocation [<o>]
+        """
+        self.dojo.print_allocations(arg)
 
     @app_exec
-    def do_print_unallocated(self, arg):
-        """prints unallocted rooms"""
-        pass
+    def do_print_unallocated(self, args):
+        """prints unallocted rooms
+         Usage: print_unallocated [<o>]
+         """
+        self.dojo.print_unallocated(args)
 
     @app_exec
     def do_allocate(self, arg):
