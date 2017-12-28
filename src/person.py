@@ -2,10 +2,10 @@ class Person(object):
     '''
     creating class person as the superclass for the fellow and
     staff sub-classes to inehrit properties such
-    as first_name, last_name and person type to inherit.
+    as first_name, last_name and person type.
     '''
 
-    def __init__(self, person_name, person_type, wants_accomodation='N'):
+    def __init__(self, person_name=None, person_type=None, wants_accomodation="N"):
         self.person_name = person_name
         self.person_type = person_type
         """The id() function returns unique integer(identity)
@@ -20,7 +20,7 @@ class Fellow(Person):
     def __init__(self, person_name, wants_accomodation):
         super(Fellow, self).__init__(
             person_name, person_type='Fellow',
-            wants_accomodation=wants_accomodation)
+            wants_accomodation='Y')
 
 
 class Staff(Person):
@@ -29,4 +29,4 @@ class Staff(Person):
     def __init__(self, person_name, wants_accomodation):
         super(Staff, self).__init__(
             person_name, person_type='Staff',
-            wants_accomodation=wants_accomodation)
+            wants_accomodation='N')

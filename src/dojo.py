@@ -12,8 +12,12 @@ class Dojo(object):
     unallocated_people = []
 
     def __init__(self):
+
         self.room_list = []
         self.people = []
+
+        self.all_rooms = []
+        self.all_people = []
         self.livingspace_with_occupants = {}
         self.office_with_occupants = {}
     """
@@ -26,16 +30,20 @@ class Dojo(object):
         if args["<room_type>"] == "office":
             for room in args["<room_name>"]:
                 new_room = Office(room)
+
                 self.room_list.append(new_room)
 
                 self.office_with_occupants[new_room] = []
+
                 print("An office called {} has been successfully created!".format(new_room.room_name))
                 """checks whether the room given is livingspace"""
         elif args["<room_type>"] == "livingspace":
             for room in args["<room_name>"]:
                 new_room = Living_Space(room)
+
                 #self.room_list.append(new_room)
                 self.livingspace_with_occupants[new_room] = []
+
                 print("Living_Space called {} has been successfully created!".format(new_room.room_name))
         else:
             print(
@@ -46,6 +54,7 @@ class Dojo(object):
      '<person_type>': 'fellow'}
     """
     def add_person(self, args):
+
         """Adds a person to the dojo and allocates the person to a random room
         """
         if args['<person_type>'] == 'fellow':
@@ -67,6 +76,14 @@ class Dojo(object):
         room_name = args["<room_name>"]
         room_list.append(room_name)
         print(room_list)
+
+        if args['<person_type>'] == 'fellow':
+            new_person = Fellow(args['<person_name>'], args['<person_type>'])
+            print("A person called {} has been added to the room!".format(new_person.person_name))
+        elif args['<person_type>'] == 'staff':
+            new_person = Staff(args['<person_name>'], args['<person_type>'])
+            print(new_person.person_name)
+
 
 
 

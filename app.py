@@ -28,6 +28,9 @@ def app_exec(func):
         try:
             opt = docopt(fn.__doc__, arg)
         except DocoptExit as e:
+
+            # The DocoptExit is thrown when the args do not match.
+
             msg = "Invalid command! See help."
             print(msg)
             print(e)
@@ -72,13 +75,26 @@ class DojoCli(cmd.Cmd):
 
         self.dojo.print_room(arg)
 
+
     @app_exec
     def do_print_allocations(self, arg):
         """Usage:prints alloacted rooms"""
+
+        pass
+
+
+
+    
+
+    @app_exec
+    def do_print_allocations(self, arg):
+        """prints alloacted rooms"""
+
         pass
 
     @app_exec
     def do_print_unallocated(self, arg):
+
         """Usage:prints unallocted rooms"""
 
     @app_exec
@@ -109,9 +125,49 @@ class DojoCli(cmd.Cmd):
     def do_print_person_id(self, arg):
         """usage: prints the id of the person"""
 
+        """prints unallocted rooms"""
+        pass
+
+    @app_exec
+    def do_allocate(self, arg):
+        """ allocates rooms"""
+        pass
+
+    @app_exec
+    def do_get_person_id(self, arg):
+        """gets the person id"""
+        pass
+
+    @app_exec
+    def do_reallocate_person(self, arg):
+        """re-allocates a person"""
+        pass
+
+    @app_exec
+    def do_save_state(self, arg):
+        """saves the state"""
+        pass
+
+    @app_exec
+    def do_load_state(self, arg):
+        """loads the state"""
+        pass
+
+    @app_exec
+    def do_load_people(self, arg):
+        """ loads people"""
+        pass
+
+    @app_exec
+    def do_print_person_id(self, arg):
+        """ prints the id of the person"""
+        pass
+
+
     @app_exec
     def do_quit(self, arg):
         """usage: Exits the app"""
+
         
 
 
