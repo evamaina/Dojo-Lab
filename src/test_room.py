@@ -31,7 +31,7 @@ class RoomTestCases(unittest.TestCase):
         self.assertEqual(self.new_office.room_name, "Blue")
         self.assertTrue(self.new_office.room_type, "office")
         self.assertEqual(self.new_office.room_capacity, 6)
-        self.assertEqual(self.new_office.room_occupant, [])
+        self.assertEqual(self.new_office.room_occupants, [])
         self.assertTrue(isinstance(self.new_office, Office))
 
     def test_livingspace_object(self):
@@ -39,15 +39,15 @@ class RoomTestCases(unittest.TestCase):
         Tests for the class living space and its attributes
         """
 
-        self.assertTrue(self.new_living_Space, "Red")
-        self.assertEqual(self.new_living_Space.room_name, "Red")
+        self.assertTrue(self.new_living_Space, "Mag")
+        self.assertEqual(self.new_living_Space.room_name, "Mag")
 
         self.assertTrue(self.new_living_Space, "Mag")
         self.assertEqual(self.new_living_Space.room_name, "Mag")
 
         self.assertTrue(self.new_living_Space.room_type, "living_Space")
         self.assertEqual(self.new_living_Space.room_capacity, 4)
-        self.assertEqual(self.new_living_Space.room_occupant, [])
+        self.assertEqual(self.new_living_Space.room_occupants, [])
         self.assertTrue(isinstance(self.new_living_Space, Living_Space))
 
     def test_add_person(self):

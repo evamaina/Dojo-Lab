@@ -2,18 +2,19 @@ class Room(object):
     """A class to create room objects whereby the other sub-classes
     like office and living room inherit properties from."""
 
-    def __init__(self, room_name=None, room_type= None, room_capacity=None):
+    def __init__(self, room_name=None,
+                 room_type=None, room_capacity=None):
 
         self.room_name = room_name
         self.room_type = room_type
         self.room_capacity = room_capacity
-        self.room_occupant = []
+        self.room_occupants = []
 
     def add_person(self, person):
         """This method will add a person to a room and
          reduce capacity by one"""
 
-        self.room_occupant.append(person)
+        self.room_occupants.append(person)
         self.room_capacity -= 1
         return self.room_capacity
 

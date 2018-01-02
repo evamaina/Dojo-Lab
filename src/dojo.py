@@ -1,278 +1,370 @@
 import random
-from src.room import *
-from src.person import *
+# import os
+# import sys  # System-specific parameters and functions
+# import inspect
+
+from src.room import Office, Living_Space
+from src.person import Staff, Fellow
 
 
 class Dojo(object):
 
-    """Class Dojo that creates rooms, 
+    """Class Dojo that creates rooms,
     adds people to rooms and saves the state
     of the rooms and people.
     """
-    unallocated_people = []
-
     def __init__(self):
+        self.people = {
+            "fellows": [],
+            "staff": [],
+            "with_offices": [],
+            "without_offices": [],
+            "with_livingspaces": [],
+            "without_livingspaces": []
+        }
+        self.rooms = {
+            "offices": [],
+            "livingspaces": []
+        }
 
-        self.room_list = []
-        self.people = []
+    def get_random_room(self, room_type):
+        """
+         returns an office or living space that has space.
+        """
+        # Get a random office
+        if room_type == "office":
+            if [room for room in self.rooms["offices"]
+               if len(room.room_occupants) < room.room_capacity]:
+                random_office = random.choice(
+                    [room for room in self.rooms["offices"]if
+                     len(room.room_occupants) < room.room_capacity])
+                return random_office
 
-        self.all_rooms = []
-        self.all_people = []
-        self.livingspace_with_occupants = {}
-        self.office_with_occupants = {}
-    """
-    {'<room_name>': ['blue', 'gree', 'red'],
-     '<room_type>': 'office'}
+                # Get a random living space
+        elif room_type == "livingspace":
+            if [room for room in self.rooms["livingspaces"]
+               if len(room.room_occupants) < room.room_capacity]:
+                random_livingspace = random.choice(
+                    [room for room in self.rooms["livingspaces"] if
+                     len(room.room_occupants) < room.room_capacity])
 
-    """
+                return random_livingspace
+
+    def room_exist(self, room_name, list):
+        """Function to check if a romm with same name exist
+        room_status can have 0 and 1. 0-does not exist while
+         1-room with same name exist"""
+        room_status = 0
+        for i in list:
+                if(i.room_name in room_name):
+                    room_status = 1
+                    break
+        return room_status
+
     def create_room(self, args):
-        """ create room """
         if args["<room_type>"] == "office":
             for room in args["<room_name>"]:
                 new_room = Office(room)
-
-                self.room_list.append(new_room)
-
-                self.office_with_occupants[new_room] = []
-
-                print("An office called {} has been successfully created!".format(new_room.room_name))
+                if(self.room_exist(new_room.room_name,
+                   self.rooms["offices"]) == 1):
+                    print("A room called {} already exists."
+                          .format(new_room.room_name))
+                else:
+                    new_office = Office(room)
+                    self.rooms["offices"].append(new_office)
+                    print("An office called {} has been successfully created!"
+                          .format(new_office.room_name))
                 """checks whether the room given is livingspace"""
         elif args["<room_type>"] == "livingspace":
-            for room in args["<room_name>"]:
-                new_room = Living_Space(room)
+            for room_name in args["<room_name>"]:
+                if(
+                    self.room_exist(room_name, self.rooms["livingspaces"]) == 1
+                ):
+                    print("Sorry. A room called {} already exists. "
+                          "Please try again another name".format(room_name))
+                else:
+                    new_livingspace = Living_Space(room_name)
+                    self.rooms["livingspaces"].append(new_livingspace)
+                    print("A living space called {} has been created"
+                          .format(new_livingspace.room_name))
 
-                #self.room_list.append(new_room)
-                self.livingspace_with_occupants[new_room] = []
+    def print_room(self, args):
 
-                print("Living_Space called {} has been successfully created!".format(new_room.room_name))
+        room_name = args['<room_name>'][0]
+        rooms = self.rooms["offices"] + self.rooms["livingspaces"]
+        if room_name not in [room.room_name for room in rooms]:
+            print("\nRoom does not exist\n")
         else:
-            print(
-                "Confirm if u entered the correct room type and try again")
-    """
-    args = {'--wants_accomodation': True,
-     '<person_name>': 'eva',
-     '<person_type>': 'fellow'}
-    """
+            print("\nRoom " + room_name)
+            print("------------------------------------\n")
+            for room in rooms:
+                if room.room_name == room_name:
+                    if room.room_occupants:
+                        for person in room.room_occupants:
+                            print(str(person.person_id) + ", " +
+                                  person.person_name + " " +
+                                  person.person_type + " " +
+                                  person.wants_accomodation)
+            print("\n")
+
     def add_person(self, args):
+        person_name = args['<F_name>'] + " " + args['<L_name>']
+        if args['<person_type>'] == 'fellow':
+            wants_accommodation = args['<wants_accomodation>']
+            new_fellow = Fellow(person_name, args['<wants_accomodation>'])
+            self.people["fellows"].append(new_fellow)
+            print("A person called {0}, ID:{1} has been added to the dojo!"
+                  .format(new_fellow.person_name, new_fellow.person_id))
+            if wants_accommodation == 'y' or wants_accommodation == 'Y':
+                """ Checks if there is available living space and if none
+                  the fellow is added to without living spaces list
+                """
+                fellow_livingspace = self.get_random_room("livingspace")
+                if fellow_livingspace is not None:
+                    fellow_livingspace.room_occupants.append(new_fellow)
+                    self.people["with_livingspaces"].append(new_fellow)
+                    print(
+                        "{0} has been allocated the living space {1}.".format(
+                            new_fellow.person_name,
+                            fellow_livingspace.room_name))
+                else:
+                    self.people["without_livingspaces"].append(new_fellow)
+                    print("No living space is currently available for {}."
+                          .format(new_fellow.person_name))
 
-        """Adds a person to the dojo and allocates the person to a random room
+            elif wants_accommodation == 'n' or wants_accommodation == 'N':
+                self.people["without_livingspaces"].append(new_fellow)
+            # Check if there is a vacant office, if none, add the fellow to
+            # the without offices list
+            fellow_office = self.get_random_room("office")
+            if fellow_office is not None:
+                fellow_office.room_occupants.append(new_fellow)
+                self.people["with_offices"].append(new_fellow)
+                print("{0} has been allocated the office {1}."
+                      .format(new_fellow.person_name, fellow_office.room_name))
+
+            else:
+                self.people["without_offices"].append(new_fellow)
+                print("Sorry. No office is currently available for {}."
+                      "Please try again later".format(new_fellow.person_name))
+            print("\n")
+            return new_fellow
+
+        elif args['<person_type>'] == 'staff':
+            new_staff = Staff(person_name, args['<person_type>'])
+            self.people["staff"].append(new_staff)
+            print("A person called {0}, ID:{1} has been added to the dojo!"
+                  .format(new_staff.person_name, new_staff.person_id))
+            """ Checks if there is a vacant office and if none the staff is added to
+             without offices list
+            """
+            staff_office = self.get_random_room("office")
+            if staff_office is not None:
+                staff_office.room_occupants.append(new_staff)
+                self.people["with_offices"].append(new_staff)
+                print("{0} has been allocated the office {1}.".
+                      format(new_staff.person_name, staff_office.room_name))
+            else:
+                self.people["without_offices"].append(new_staff)
+                print("No office is currently available for {},"
+                      .format(new_staff.person_name))
+            print("\n")
+            return new_staff
+
+    def print_allocations(self, args):
+        rooms = self.rooms["offices"] + self.rooms["livingspaces"]
+        filename = args['<o>']
+
+        if(filename):
+            file = open(filename + ".txt", "w")
+            members = ""
+            for room in rooms:
+                if room.room_occupants:
+                    members += "Room " + room.room_name + "\n"
+                    members += "-------------------------------\n"
+                    for person in room.room_occupants:
+                        members = members + person.person_name + ", "
+                    members += "\n\n"
+            file.write(members)
+            file.close()
+        print("\n")
+        for room in rooms:
+            if room.room_occupants:
+                print("Room " + room.room_name)
+                print("-------------------------------")
+                members = ""
+                for person in room.room_occupants:
+                    members = members + person.person_name + ", "
+                print(members)
+                print("\n")
+        print("\n")
+
+    def print_unallocated(self, args):
+        filename = args['<o>']
+        if(filename):
+            members = "\nUnallocated members\n--------------------------\n"
+            peoples = self.people["without_offices"] +\
+                self.people["without_livingspaces"]
+            for people in peoples:
+                members = members + people.person_name + ", "
+
+            file = open(filename + ".txt", "w")
+            members += "\n"
+            file.write(members)
+            file.close()
+
+        peoples = self.people["without_offices"] +\
+            self.people["without_livingspaces"]
+        print("Unallocated Member\n----------------------------\n")
+        members = ""
+        for people in peoples:
+            members = members + people.person_name + ", "
+        print(members + "\n")
+        print("\n")
+
+    def reallocate_person(self, person_id, room_name):
         """
-        if args['<person_type>'] == 'fellow':
-
-            new_person = Fellow(args['<person_name>'], args['<person_type>'])
-            #self.people.append(new_person)
-            print("A person called {} has been successfully added!".format(new_person.person_name))
-            #pirnt("Fellow {} has been allocated the office Blue".format(new_person.person_name))
-        elif args['<person_type>'] == 'staff':
-            new_person = Staff(args['<person_name>'], args['<person_type>'] )
-            #self.people.append(new_person)
-            print("A person called {} has been successfully added !".format(new_person.person_name))
-            #pirnt("Staff {} has been allocated the office Blue".format(new_person.person_name))
-            #self.allocate_random_room(new_person, wants_accomodation)
-        else:
-            print"Confirm if you have added the person to the correct room and try again"
-
-    def print_room(self, room_name):
-        room_name = args["<room_name>"]
-        room_list.append(room_name)
-        print(room_list)
-
-        if args['<person_type>'] == 'fellow':
-            new_person = Fellow(args['<person_name>'], args['<person_type>'])
-            print("A person called {} has been added to the room!".format(new_person.person_name))
-        elif args['<person_type>'] == 'staff':
-            new_person = Staff(args['<person_name>'], args['<person_type>'])
-            print(new_person.person_name)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Usage: add_person <person_name>  (fellow,staff)
-        [<wants_accommodation>]
-        if args["<person_name>"]:
-            person_name = args["<person_name>"]
-
-        if args["<person_type>"] == "Fellow":
-        if args["<wants_accommodation>"] == "Y" or\
-           args["<wants_accommodation>"] == "y":
-                    wants_accommodation = True
-                    person_type = "Fellow"
-                    dojo.add_person(person_name, person_type,\
-                                    wants_accommodation)
-                    print("")
-
-        elif args["<wants_accommodation>"] is None:
-                    wants_accommodation = False
-                    person_type = "Fellow"
-                    dojo.add_person(person_name, person_type,\
-                                    wants_accommodation)
-                    print("")
-
-        elif args["<person_type>"] == "Staff":
-                person_type = "Staff"
-                dojo.add_person(person_name, person_type)
-                print("")
-
-        if args["<wants_accommodation>"] == "Y" or args[
-                "<wants_accommodation>"] == "y":
-                    cprint(
-                        " Staff cannot be allocated to a living space")
+        Method to reallocate an individual from one room to another using their
+        ids
+        """
+        new_person = self.get_person_object(person_id)
+        if new_person is not None:
+
+            new_room = self.check_room(room_name, new_person.person_id)
+            old_office = self.get_old_office(new_person.person_id)
+            old_livingspace = self.get_old_livingspace(new_person.person_id)
+
+            if isinstance(new_person, Fellow) or isinstance(new_person, Staff):
+                if new_room is not "full" and new_room is not "present" and \
+                        new_room:
+                    if isinstance(new_room, Living_Space):
+                        if isinstance(new_person, Staff):
+                            print("Cannot reallocate staff to a living space")
+                        elif isinstance(new_person, Fellow):
+                            if isinstance(old_livingspace, Living_Space) and \
+                                    new_person in \
+                                    old_livingspace.room_occupants:
+                                new_room.room_occupants.append(
+                                    old_livingspace.room_occupants.pop(
+                                        old_livingspace.room_occupants.index(
+                                            new_person)))
+                                print("{0} has been reallocated "
+                                      "to {1} from {2}".format
+                                      (new_person.person_name, room_name,
+                                       old_livingspace.room_name))
+                            elif new_person in \
+                                    self.people["without_livingspaces"]:
+                                print("{0} cannot be reallocated. "
+                                      "Allocate them a room first".format
+                                      (new_person.person_name))
+                            else:
+                                print("{} has not been reallocated.".format(
+                                    new_person.person_name))
+
+                    elif isinstance(new_room, Office):
+                        if isinstance(old_office, Office) and \
+                                new_person in old_office.room_occupants:
+                            new_room.room_occupants.append(
+                                old_office.room_occupants.pop(
+                                    old_office.room_occupants.index(
+                                        new_person)))
+                            print("{0} has been reallocated to {1} from {2}".
+                                  format(new_person.person_name, room_name,
+                                         old_office.room_name))
+                        elif new_person in self.people["without_offices"]:
+                            print("{0} cannot be reallocated. "
+                                  "Allocate them a room first".format
+                                  (new_person.person_name))
+                        else:
+                            print("{} has not been reallocated.".format(
+                                new_person.person_name))
+
+                elif new_room is "full":
+                    print("Sorry. {} is already full".format(room_name))
+
+                elif new_room is "present":
+                    print("Sorry. {0} is already in room {1}".format(
+                        new_person.person_name, room_name))
+                elif new_room is None:
+                    print(
+                        "Sorry. Room {} doest not exist in the system.".format(
+                            room_name))
+
+        elif new_person is None:
+            print("Sorry. {} does not exist in the system. \
+                   Please try again later".format(person_id))
 
         else:
-                cprint(
-                    "Confirm if u entered the correct person type\
-                        and try again")
+            print("Sorry an error occured")
 
-        @docopt_cmd
-    def do_print_room(self, args):
-        ""Usage: print_room <room_name>""
-        room_name = args["<room_name>"]
-        print("")
-        dojo.print_room(room_name)
+        return self.rooms
 
+    def get_person_object(self, person_id):
+        """
+        Method to check if a person exists before reallocation
+        """
+        all_people = self.people["fellows"] + self.people["staff"]
+        if person_id in [person.person_id for person in all_people]:
+            for person in all_people:
+                if person.person_id == person_id:
+                    return person
 
+        elif person_id not in [person.person_id for person in all_people]:
+            return None
 
-        @docopt_cmd
-    def do_print_allocations(self, args):
-        ""Usage: print_allocations [--file=text_file]""
-        if args["--file"]:
-            print(args["--file"])
-            print(dojo.print_allocations(args["--file"]))
-        dojo.print_allocations()
+    def check_room(self, room_name, person_id):
+        """
+        Method to check if the room that the person is to be reallocated to
+        exists, is vacant and the person is not already in it.
+        """
+        all_rooms = self.rooms["offices"] + self.rooms["livingspaces"]
+        if room_name in [room.room_name for room in all_rooms]:
+            for room in all_rooms:
+                if room.room_name == room_name and len(room.room_occupants) < \
+                        room.room_capacity and person_id not in \
+                        [person.person_id for person in room.room_occupants]:
+                    return room
+                elif room.room_name == room_name and len(room.room_occupants) \
+                        >= room.room_capacity:
+                    return "full"
+                elif room.room_name == room_name and person_id in \
+                        [person.person_id for person in room.room_occupants]:
+                    return "present"
 
+        elif room_name not in [room.room_name for room in all_rooms]:
+            return None
 
-    @docopt_cmd
-    def do_print_unallocated(self, args):
-        "Usage: print_unallocated [--file=text_file]""
-        if args["--file"]:
-            print(args["--file"])
-            dojo.print_unallocated(args["--file"])
-        dojo.print_unallocated()
+    def get_old_office(self, person_id):
+        """
+        Method to get the previous office that the person is in
+        """
+        for room in self.rooms["offices"]:
+            if person_id in [person.person_id for
+                             person in room.room_occupants]:
+                return room
 
-         @docopt_cmd
-    def do_allocate(self, args):
-        ""Usage: allocate""
-        dojo.allocate()
+    def get_old_livingspace(self, person_id):
+        """
+        Method to get the previous living space that the person is in
+        """
+        for room in self.rooms["livingspaces"]:
+            if person_id in [person.person_id for
+                             person in room.room_occupants]:
+                return room
 
-            @docopt_cmd
-    def do_get_person_id(self, args):
-        "Usage: get_person_id <person_name> ""
-        person_name = args["<person_name>"] 
-        dojo.get_person_id(person_name)
+    def load_people(self, file="load_people.txt"):
+        """
+        Method to load people from text file and allocate them rooms
+        """
+        input_file = open("load_people.txt", "r")
+        for line in input_file:
+            arg = {}
+            line = line.split()
+            len_line = len(line)
+            arg["<F_name>"] = line[0]
+            arg["<L_name>"] = line[1]
+            arg["<person_type>"] = line[2]
+            arg["<wants_accomodation>"] = "Y" if len_line == 4 else "N"
+            self.add_person(arg)
 
-    @docopt_cmd
-    def do_reallocate_person(self, args):
-        ""Usage: reallocate_person <person_id> <new_room>""
-        if args["<person_id>"].isstring():
-            print("person id cannot be string")
-            return
-        else:
-            (dojo.reallocate_person(int(args['<person_id>']),
-                                     args['<new_room>']))
-
-    @docopt_cmd
-    def do_save_state(self, args):
-        "Usage: save_state [--db=sqlite_database]""
-        # print(args['--db'])
-        dojo.save_state(args['--db'])
-
-    @docopt_cmd
-    def do_load_state(self, args):
-        "Usage: load_state <db>""
-        db_name = args["<db>"]
-        dojo.load_state(db_name)
-
-    @docopt_cmd
-    def do_load_people(self, args):
-        "Usage: load_people <text_file>""
-        dojo.load_people(args["<text_file>"])
-
-    @docopt_cmd
-    def do_print_person_id(self, args):
-        " Usage: print_person_id ""
-        dojo.print_person_id()
-
-    def do_quit(self, args):
-        "Quits out of Interactive Mode.""
-
-        print('Ciao Adios!!')
-        exit()
-
-
-opt = docopt(__doc__, sys.argv[1:])
-
-if opt['--interactive']:
-    Dojo().cmdloop()
-
-print(opt)
-
-"""
-
-
-    
-
-    
-
-
-
-
-    
-
-
+        print("person Loaded successfully")

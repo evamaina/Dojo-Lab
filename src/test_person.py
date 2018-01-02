@@ -3,12 +3,10 @@ import unittest
 import os
 import sys  # System-specific parameters and functions
 import inspect
-from person import Fellow, Staff
+# from person import Fellow, Staff
 currentdir = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-
-
 sys.path.insert(0, parentdir)
 
 # import sys  # System-specific parameters and functions
@@ -29,7 +27,6 @@ class PersonTestCases(unittest.TestCase):
 
         self.new_fellow = Fellow("Eva Johnson", "Y")
         self.new_staff = Staff("Evet Maina", "N")
-
 
     def test_staff_object(self):
         """

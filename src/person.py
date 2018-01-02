@@ -5,7 +5,8 @@ class Person(object):
     as first_name, last_name and person type.
     '''
 
-    def __init__(self, person_name=None, person_type=None, wants_accomodation="N"):
+    def __init__(self, person_name=None,
+                 person_type=None, wants_accomodation="N"):
         self.person_name = person_name
         self.person_type = person_type
         """The id() function returns unique integer(identity)
