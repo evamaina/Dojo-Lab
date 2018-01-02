@@ -18,7 +18,7 @@ from docopt import docopt, DocoptExit
 # from pyfiglet import figlet_format
 # from termcolor import cprint
 from src.dojo import Dojo
-# from src.room import Room, Office, Living_Space
+from src.room import Room, Office, Living_Space
 
 
 def app_exec(func):
@@ -29,9 +29,7 @@ def app_exec(func):
         try:
             opt = docopt(fn.__doc__, arg)
         except DocoptExit as e:
-
             # The DocoptExit is thrown when the args do not match.
-
             msg = "Invalid command! See help."
             print(msg)
             print(e)
@@ -90,6 +88,22 @@ class DojoCli(cmd.Cmd):
          Usage: print_unallocated [<o>]
          """
         self.dojo.print_unallocated(args)
+
+    @app_exec
+    def do_reallocate_person(self, args):
+        """
+        Usage: reallocate_person <person_id> <room_name>
+        """
+        p_id = int(args["<person_id>"])
+        r_name = args["<room_name>"]
+        self.dojo.reallocate_person(p_id, r_name)
+
+    @app_exec
+    def do_load_people(self, args):
+        """ loads people
+        Usage: load_people
+        """
+        self.dojo.load_people(args)
 
     @app_exec
     def do_quit(self, arg):
