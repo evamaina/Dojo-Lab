@@ -50,12 +50,12 @@ class Dojo(object):
 
                 return random_livingspace
 
-    def room_exist(self, room_name, list):
+    def room_exist(self, room_name, lst):
         """Function to check if a romm with same name exist
         room_status can have 0 and 1. 0-does not exist while
          1-room with same name exist"""
         room_status = 0
-        for i in list:
+        for i in lst:
                 if(i.room_name in room_name):
                     room_status = 1
                     break

@@ -18,7 +18,7 @@ from docopt import docopt, DocoptExit
 # from pyfiglet import figlet_format
 # from termcolor import cprint
 from src.dojo import Dojo
-from src.room import Room, Office, Living_Space
+from src.room import Office, Living_Space
 
 
 def app_exec(func):
