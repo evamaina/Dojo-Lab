@@ -1,7 +1,7 @@
 import random
-# import os
-# import sys  # System-specific parameters and functions
-# import inspect
+import os
+import sys  # System-specific parameters and functions
+import inspect
 
 from src.room import Office, Living_Space
 from src.person import Staff, Fellow
