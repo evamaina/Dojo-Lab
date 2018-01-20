@@ -1,5 +1,6 @@
 
  Dojo-Lab
+ 
 [![Build Status](https://travis-ci.org/evamaina/Dojo-Lab.svg?branch=master)](https://travis-ci.org/evamaina/Dojo-Lab)
 [![Coverage Status](https://coveralls.io/repos/github/evamaina/Dojo-Lab/badge.svg?branch=master)](https://coveralls.io/github/evamaina/Dojo-Lab?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0795daa881e64c33bddfe082e430f342)](https://www.codacy.com/app/evamaina/Dojo-Lab?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=evamaina/Dojo-Lab&amp;utm_campaign=Badge_Grade)
