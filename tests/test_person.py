@@ -2,7 +2,7 @@ import unittest
 import os
 import sys  # System-specific parameters and functions
 import inspect
-from person import Fellow, Staff
+
 currentdir = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -10,6 +10,7 @@ parentdir = os.path.dirname(currentdir)
 
 sys.path.insert(0, parentdir)
 
+from src.person import Fellow, Staff
 
 
 
