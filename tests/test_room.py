@@ -49,7 +49,7 @@ class RoomTestCases(unittest.TestCase):
         Room.add_person(self.new_office, self.new_staff)
         self.assertEqual(self.new_office.room_capacity, 5)
         """calling add_person method to add a new person to the living
-        space thus reducing the capacity of theliving space to 3"""
+        space thus reducing the capacity of the living space to 3"""
 
         Room.add_person(self.new_living_Space, self.new_fellow)
         self.assertEqual(self.new_living_Space.room_capacity, 3)
@@ -57,3 +57,4 @@ class RoomTestCases(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    
